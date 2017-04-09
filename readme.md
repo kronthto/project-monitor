@@ -16,7 +16,7 @@ This tool can check if your projects are up and send a push-notification otherwi
 $ composer install (--no-dev -o)
 $ cp .env.example .env
 ```
-* Adjust *.env* to your environment (database)
+* Adjust *.env* to your environment (database, telegram-apikey)
 ``` bash
 $ ./artisan migrate
 ```
