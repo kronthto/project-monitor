@@ -1,0 +1,15 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](http://keepachangelog.com/).
+
+## [Unreleased]
+
+## 0.1.0 - 2017-04-09
+### Added
+- Basic Project setup
+- Abstract Checks
+- HTTP Checker
+- Telegram Notifications
+
+[Unreleased]: https://github.com/kronthto/project-monitor/compare/v0.1.0...HEAD
