@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class HttpCheckService extends AbstractChecker
 {
-    const EMPTY_RESPONSE_THRESHOLD = 10;
+    const EMPTY_RESPONSE_THRESHOLD = 10; // strlen
     const CONCURRENT_REQUESTS = 10;
 
     /** @var Client */
@@ -19,8 +19,10 @@ class HttpCheckService extends AbstractChecker
 
     /** @var Promise\PromiseInterface[]|array */
     protected $requests = [];
-    /** @var CheckInterface[]|array */
+    /** @var HttpCheck[]|array */
     protected $checkMap = [];
+    /** @var bool */
+    protected $isRetrying = false;
 
     public function __construct()
     {
@@ -43,20 +45,54 @@ class HttpCheckService extends AbstractChecker
             }
 
             $this->checkMap[] = $check;
-            $this->requests[] = $this->client->getAsync($check->url);
         });
 
-        $each = Promise\each_limit($this->requests, static::CONCURRENT_REQUESTS, function (ResponseInterface $result, int $idx) {
-            // fulfilled
-            $this->checkResponse($result, $this->checkMap[$idx]);
-        }, function (RequestException $reason, int $idx) {
-            // rejected
-            $this->checkFailed($this->checkMap[$idx], $reason->getMessage());
-        });
-        $each->wait();
+        $this->prepareRequests();
+
+        $this->fireRequests();
     }
 
-    protected function checkResponse(ResponseInterface $response, CheckInterface $check)
+    protected function prepareRequests()
+    {
+        foreach ($this->checkMap as $idx => $check) {
+            $this->requests[$idx] = $this->client->getAsync($check->url);
+        }
+    }
+
+    protected function fireRequests()
+    {
+        $each = Promise\each_limit(
+            $this->requests,
+            static::CONCURRENT_REQUESTS,
+            function (ResponseInterface $result, int $idx) {
+                // fulfilled
+                if ($this->checkResponse($result, $this->checkMap[$idx])) {
+                    unset($this->checkMap[$idx]);
+                    unset($this->requests[$idx]);
+                }
+            },
+            function (RequestException $reason, int $idx) {
+                // rejected
+                $this->checkFailed($this->checkMap[$idx], $reason->getMessage());
+            }
+        );
+        $each->wait();
+
+        if (!$this->isRetrying) {
+            $this->isRetrying = true;
+            $this->prepareRequests();
+            $this->fireRequests();
+        }
+    }
+
+    protected function checkFailed(CheckInterface $check, string $reason)
+    {
+        if ($this->isRetrying) {
+            parent::checkFailed($check, $reason);
+        }
+    }
+
+    protected function checkResponse(ResponseInterface $response, CheckInterface $check): bool
     {
         if ($response->getBody()->getSize() < static::EMPTY_RESPONSE_THRESHOLD) {
             $this->checkFailed($check, 'Empty or short response-body: '.$response->getBody()->getContents());
