@@ -26,6 +26,11 @@ class HttpCheckService extends AbstractChecker
 
     public function __construct()
     {
+        $this->initClient();
+    }
+
+    protected function initClient()
+    {
         $this->client = new Client([
             'timeout' => 15.0,
             'headers' => [
@@ -83,6 +88,7 @@ class HttpCheckService extends AbstractChecker
                 return;
             }
             $this->isRetrying = true;
+            $this->initClient(); // Reinit client to bust any potential caching Guzzle does
             $this->prepareRequests();
             $this->fireRequests();
         }
