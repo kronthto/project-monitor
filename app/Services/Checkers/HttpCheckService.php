@@ -79,6 +79,9 @@ class HttpCheckService extends AbstractChecker
         $each->wait();
 
         if (!$this->isRetrying) {
+            if (sizeof($this->checkMap) == 0) {
+                return;
+            }
             $this->isRetrying = true;
             $this->prepareRequests();
             $this->fireRequests();
