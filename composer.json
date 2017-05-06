@@ -18,6 +18,9 @@
     ],
     "homepage": "https://github.com/kronthto/project-monitor",
     "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~5.7",
         "barryvdh/laravel-ide-helper": "^2.3"
     },
     "autoload": {
@@ -26,6 +29,11 @@
         ],
         "psr-4": {
             "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
