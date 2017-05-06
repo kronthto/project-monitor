@@ -2,6 +2,7 @@
 
 [![Software License][ico-license]](LICENSE.md)
 [![Latest Stable Version][ico-githubversion]][link-releases]
+[![Build Status][ico-build]][link-build]
 
 This tool can check if your projects are up and send a push-notification otherwise.
 
@@ -36,7 +37,9 @@ Please see the [CHANGELOG](CHANGELOG.md) for more information on what has change
 The MIT License (MIT). Please see the [License File](LICENSE.md) for more information.
 
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-githubversion]: https://poser.pugx.org/kronthto/project-monitor/v/stable
+[ico-githubversion]: https://badge.fury.io/gh/kronthto%2Fproject-monitor.svg
+[ico-build]: https://travis-ci.org/kronthto/project-monitor.svg?branch=master
 
 [link-releases]: https://github.com/kronthto/project-monitor/releases
 [link-contributors]: ../../contributors
+[link-build]: https://travis-ci.org/kronthto/project-monitor
