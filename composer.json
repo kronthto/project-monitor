@@ -1,7 +1,7 @@
 {
     "name": "kronthto/project-monitor",
     "description": "Notifies you if something makes boom",
-    "keywords": ["server", "monitoring", "http", "crash", "notification", "push"],
+    "keywords": ["server", "monitoring", "http", "crash", "notification", "push", "devops"],
     "license": "MIT",
     "type": "project",
     "require": {
