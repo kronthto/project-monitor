@@ -15,6 +15,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'App\Events\ItMadeBoom' => [
             'App\Listeners\SendPanicNotification',
+            \App\Listeners\LogFailure::class,
         ],
     ];
 

@@ -10,6 +10,7 @@ This tool can check if your projects are up and send a push-notification otherwi
 
 * Check HTTP Services
 * Telegram notification
+* Failure logging to DB
 
 ## Install
 
