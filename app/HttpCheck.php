@@ -25,7 +25,7 @@ class HttpCheck extends Model implements CheckInterface
 
     public function getName(): string
     {
-        return $this->name;
+        return sprintf('%s (%s)', $this->name, $this->url);
     }
 
     public function getInterval(): int
